@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "sacrifice:soul_token"
+    }
+  ],
+  "result": {
+    "item": "minecraft:soul_torch"
+  }
+}

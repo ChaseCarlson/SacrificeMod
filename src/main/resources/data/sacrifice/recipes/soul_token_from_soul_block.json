@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sacrifice:soul_block"
+    }
+  ],
+  "result": {
+    "item": "sacrifice:soul_token",
+    "count": 9
+  }
+}

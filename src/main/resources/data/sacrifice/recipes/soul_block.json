@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "sacrifice:soul_token"
+    }
+  },
+  "result": {
+    "item": "sacrifice:soul_block",
+    "count": 1
+  }
+}

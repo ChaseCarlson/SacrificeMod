@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "sacrifice:block/soul_block",
+    "particle": "sacrifice:item/soul_token"
+  }
+}

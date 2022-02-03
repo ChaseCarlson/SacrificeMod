@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#F#",
+    "#/#"
+  ],
+  "key": {
+    "#": {
+      "item": "sacrifice:soul_token"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "sacrifice:soul_smelter",
+    "count": 1
+  }
+}

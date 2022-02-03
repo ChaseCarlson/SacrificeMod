@@ -1,0 +1,17 @@
+{
+  "itemGroup.sacrifice": "Sacrifice",
+
+  "block.sacrifice.altar": "Altar",
+  "block.sacrifice.soul_block": "Soul Block",
+
+  "item.sacrifice.soul_sucker": "Soul Sucker",
+  "item.sacrifice.soul_smelter": "Soul Smelter",
+
+  "item.sacrifice.soul_token": "Soul Token",
+  "item.sacrifice.entity_soul": "Nobody's Soul",
+
+  "advancements.sacrifice.root.title": "Sacrifice",
+  "advancements.sacrifice.root.description": "Or sacrilege?",
+  "advancements.sacrifice.place_altar.title": "O' Come to the Altar",
+  "advancements.sacrifice.place_altar.description": "Place down an altar"
+}

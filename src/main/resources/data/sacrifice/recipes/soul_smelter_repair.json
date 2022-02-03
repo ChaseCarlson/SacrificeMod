@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sacrifice:soul_smelter"
+    },
+    {
+      "item": "sacrifice:soul_token"
+    }
+  ],
+  "result": {
+    "item": "sacrifice:soul_smelter"
+  }
+}
