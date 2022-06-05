@@ -1,12 +1,18 @@
 package com.chasecarlson.sacrifice.block;
 
 import com.chasecarlson.sacrifice.item.ModItems;
+import com.chasecarlson.sacrifice.util.AdvancementUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -53,6 +59,7 @@ public class BlockAltar extends Block {
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (!level.isClientSide()) {
+			ServerPlayer sp = (ServerPlayer)player;
 			List<Entity> entitiesOnAltar = level.getEntities(null, AABB.unitCubeFromLowerCorner(new Vec3(pos.getX(), pos.getY() + 1, pos.getZ())));
 			int sacrificedAnimalsCount = 0;
 			for (Entity entity : entitiesOnAltar) {
@@ -72,8 +79,8 @@ public class BlockAltar extends Block {
 				if (sacrificedAnimalsCount > 1) {
 					builder.append("s");
 				}
-				builder.append(" and will receive an equal number of Soul Tokens from God.");
-
+				builder.append(" and will receive an equal number of Soul Tokens.");
+				AdvancementUtil.grantAdvancement(sp, "advancements.sacrifice.sacrifice_animal");
 				player.sendMessage(new TextComponent(builder.toString()).withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
 			}
 			else {

@@ -17,7 +17,7 @@
   },
   "criteria": {
     "place_altar": {
-      "trigger": "minecraft:item_used_on_block",
+      "trigger": "sacrifice:animal_sacrificed_on_altar",
       "conditions": {
         "item": {
           "items": ["sacrifice:altar"]
