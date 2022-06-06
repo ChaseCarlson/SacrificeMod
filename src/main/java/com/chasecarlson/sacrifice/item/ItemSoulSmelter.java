@@ -91,6 +91,7 @@ public class ItemSoulSmelter extends Item {
 		}
 
 		ItemUtil.damage(stack);
+		entity.getLevel().playSound(null, entity.blockPosition(), new SoundEvent(new ResourceLocation("entity.blaze.shoot")), SoundSource.AMBIENT, 1.0f, 1.5f);
 		if (!entity.getLevel().isClientSide()) {
 			entity.setSecondsOnFire(10);
 			return InteractionResult.SUCCESS;
