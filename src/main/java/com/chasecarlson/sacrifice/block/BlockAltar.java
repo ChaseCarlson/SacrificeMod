@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -60,7 +62,12 @@ public class BlockAltar extends Block {
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (!level.isClientSide()) {
 			ServerPlayer sp = (ServerPlayer)player;
-			List<Entity> entitiesOnAltar = level.getEntities(null, AABB.unitCubeFromLowerCorner(new Vec3(pos.getX(), pos.getY() + 1, pos.getZ())));
+			int boxSize = 5;
+			AABB entitySearchAABB = AABB.of(BoundingBox.fromCorners(
+					new Vec3i(pos.getX()-boxSize, pos.getY(), pos.getZ()-boxSize),
+					new Vec3i(pos.getX()+boxSize, pos.getY(), pos.getZ()+boxSize)
+			));
+			List<Entity> entitiesOnAltar = level.getEntities(null, entitySearchAABB);
 			int sacrificedAnimalsCount = 0;
 			for (Entity entity : entitiesOnAltar) {
 				if (SacrificeWhitelist.contains(entity.getType())) {
