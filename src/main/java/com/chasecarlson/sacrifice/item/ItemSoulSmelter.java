@@ -2,6 +2,7 @@ package com.chasecarlson.sacrifice.item;
 
 import com.chasecarlson.sacrifice.ModCreativeModeTab;
 import com.chasecarlson.sacrifice.Sacrifice;
+import com.chasecarlson.sacrifice.util.ItemUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -43,36 +44,37 @@ public class ItemSoulSmelter extends Item {
 		ItemStack blockItemStack = new ItemStack(blockItem);
 		Sacrifice.LOGGER.debug("Soul Smelter used on "+blockClicked.getRegistryName());
 
+		if (!ItemUtil.isDurabilityRemaining(soulSmelterItem)) {
+			level.playSound(null, pos, new SoundEvent(new ResourceLocation("block.dispenser.fail")), SoundSource.AMBIENT, 1.0f, 1.5f);
+			return InteractionResult.PASS;
+		}
 
 		ItemStack smeltedItemStack = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(blockItemStack), level)
 				.map(SmeltingRecipe::getResultItem)
 				.filter(itemStack -> !itemStack.isEmpty())
 				.map(itemStack -> ItemHandlerHelper.copyStackWithSize(itemStack, blockItemStack.getCount() * itemStack.getCount()))
 				.orElse(null);
-		if (smeltedItemStack != null) {
-			if (soulSmelterItem.getDamageValue() < this.getMaxDamage(soulSmelterItem)) {
-				if (!level.isClientSide()) {
-					if (smeltedItemStack.getItem() instanceof BlockItem)
-					{
-						BlockItem smeltedItemBlock = (BlockItem) smeltedItemStack.getItem();
-						Block smeltedBlock = smeltedItemBlock.getBlock();
-						level.setBlock(pos, smeltedBlock.defaultBlockState(), 3);
-						level.updateNeighborsAt(pos, smeltedBlock);
-					}
-					else
-					{
-						level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-						level.updateNeighborsAt(pos, Blocks.AIR);
-						ItemEntity itemOnGround = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, smeltedItemStack, 0, 0.2, 0);
-						level.addFreshEntity(itemOnGround);
-						return InteractionResult.SUCCESS;
-					}
-					soulSmelterItem.setDamageValue(soulSmelterItem.getDamageValue() + 1);
-				}
-				level.playSound(null, pos, new SoundEvent(new ResourceLocation("block.fire.ambient")), SoundSource.AMBIENT, 1.0f, 2.0f);
+
+		if (smeltedItemStack == null)
+			return InteractionResult.PASS;
+
+		level.playSound(null, pos, new SoundEvent(new ResourceLocation("block.fire.ambient")), SoundSource.AMBIENT, 1.0f, 2.0f);
+		ItemUtil.damage(soulSmelterItem);
+		if (!level.isClientSide()) {
+			if (smeltedItemStack.getItem() instanceof BlockItem)
+			{
+				BlockItem smeltedItemBlock = (BlockItem) smeltedItemStack.getItem();
+				Block smeltedBlock = smeltedItemBlock.getBlock();
+				level.setBlock(pos, smeltedBlock.defaultBlockState(), 3);
+				level.updateNeighborsAt(pos, smeltedBlock);
 			}
-			else {
-				level.playSound(null, pos, new SoundEvent(new ResourceLocation("block.dispenser.fail")), SoundSource.AMBIENT, 1.0f, 1.5f);
+			else
+			{
+				level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				level.updateNeighborsAt(pos, Blocks.AIR);
+				ItemEntity itemOnGround = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, smeltedItemStack, 0, 0.2, 0);
+				level.addFreshEntity(itemOnGround);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return InteractionResult.PASS;
@@ -80,9 +82,17 @@ public class ItemSoulSmelter extends Item {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
-		if (!entity.isOnFire()) {
+		if (!ItemUtil.isDurabilityRemaining(stack))
+		{
+			return InteractionResult.PASS;
+		}
+		if (entity.isOnFire()) {
+			return InteractionResult.PASS;
+		}
+
+		ItemUtil.damage(stack);
+		if (!entity.getLevel().isClientSide()) {
 			entity.setSecondsOnFire(10);
-			stack.setDamageValue(stack.getDamageValue() + 1);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
